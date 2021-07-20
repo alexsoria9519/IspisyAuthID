@@ -37,7 +37,4 @@ class AuthorizationMethodsActivity : AppCompatActivity() {
         return  retrofit.create(IpsidyAuthorizationService::class.java)
     }
 
-    private fun login(){
-
-    }
 }

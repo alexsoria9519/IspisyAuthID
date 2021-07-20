@@ -2,6 +2,7 @@ package com.example.testapiipidymethods.WebServices
 
 import com.example.testapiipidymethods.IDS.Request
 import com.example.testapiipidymethods.IDS.Accounts.*
+import com.example.testapiipidymethods.IDS.Authorization.CostumerInfo
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
@@ -174,7 +175,7 @@ interface IpsidyAccountServices {
         @Path(value = "uin", encoded = true) uin: String
     ): Call<Void>
 
-
-
+    @POST("login")
+    fun login(): Call<CostumerInfo>
 
 }

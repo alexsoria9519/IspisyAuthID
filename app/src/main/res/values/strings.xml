@@ -9,4 +9,5 @@
     <string name="title_activity_auth">Authorization Methods</string>
     <string name="username_ipsidy">acubillos</string>
     <string name="password_ipsidy">OTFedj$3262</string>
+    <string name="account_getApiKeys_Method">GetApiKeys</string>
 </resources>
