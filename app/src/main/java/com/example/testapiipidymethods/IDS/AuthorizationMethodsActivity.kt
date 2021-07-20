@@ -17,24 +17,6 @@ class AuthorizationMethodsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_authorization_methods)
     }
 
-    fun getService(): IpsidyAuthorizationService {
-        val preferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
-        val username = preferences.getString("USERNAME", "")
-        val password = preferences.getString("PASSWORD", "")
 
-        val okhttpclient =  OkHttpClient.Builder()
-            .addInterceptor(BasicAuthInterceptor(username!!,password!!))
-            .connectTimeout(60, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS)
-            .writeTimeout(60, TimeUnit.SECONDS)
-            .build()
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl("http://localhost:8081/IDCompleteBackendEngine/Default/AuthorizationServiceRest")
-            .client(okhttpclient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        return  retrofit.create(IpsidyAuthorizationService::class.java)
-    }
 
 }
