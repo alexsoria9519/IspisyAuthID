@@ -1,0 +1,16 @@
+{
+  "sections" : [
+    {
+      "name": "Accounts",
+      "basePath": "http://localhost:8081/IDCompleteBackendEngine/Default/AuthorizationServiceRest"
+    },
+    {
+      "name": "Authorization",
+      "basePath": "http://localhost:8081/IDCompleteBackendEngine/Default/AuthorizationServiceRest"
+    },
+    {
+      "name": "Admin",
+      "basePath": "http://localhost:8081/IDCompleteBackendEngine/Default/AuthorizationServiceRest"
+    }
+  ]
+}

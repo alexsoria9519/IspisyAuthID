@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">TestApiIpidyMethods</string>
+    <string name="section_name_account">Accounts</string>
+    <string name="section_name_admin">Admin</string>
+    <string name="section_name_auth">Authorization</string>
+    <string name="title_list_section">Ipsidy Test Methods</string>
+    <string name="title_activity_account">Accounts Methods</string>
+    <string name="title_activity_admin">Admin Methods</string>
+    <string name="title_activity_auth">Authorization Methods</string>
+    <string name="username_ipsidy">acubillos</string>
+    <string name="password_ipsidy">OTFedj$3262</string>
+</resources>
