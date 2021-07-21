@@ -21,6 +21,7 @@ class AccountMethodsActivity : AppCompatActivity() {
 
         accountsView = findViewById(R.id.accountsView)
         getApiKeys()
+
     }
 
     private fun getApiKeys(){
