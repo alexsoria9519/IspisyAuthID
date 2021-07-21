@@ -21,6 +21,12 @@ class Utils(context: Context) {
         editor.commit()
     }
 
+    fun saveDataPhoto(datImage: String){
+        var editor = preferences.edit()
+        editor.putString("IMAGE", datImage)
+        editor.commit()
+    }
+
     fun getDataAccount(): ApiKeyLite{
         try {
             val gson = Gson()

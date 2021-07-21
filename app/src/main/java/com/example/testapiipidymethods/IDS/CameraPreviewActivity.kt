@@ -1,4 +1,4 @@
-package com.example.testapiipidymethods
+package com.example.testapiipidymethods.IDS
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -7,7 +7,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.testapiipidymethods.IDS.FacelokCallback
+import com.example.testapiipidymethods.R
 import com.ipsidy.faceloksdk.CameraFacingEnum
 import com.ipsidy.faceloksdk.CameraParameters
 import com.ipsidy.faceloksdk.FacelokImpl

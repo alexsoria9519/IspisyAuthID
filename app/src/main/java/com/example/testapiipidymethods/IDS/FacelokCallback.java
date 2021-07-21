@@ -61,6 +61,9 @@ public class FacelokCallback extends  com.ipsidy.faceloksdk.FacelokCallback{
 
         mInterface.stop();
 
+        Consumo consumo = new Consumo();
+        consumo.getDataFoto(convertBitmapImageToBase64String(photo), photo, context);
+
 //        Context context = getApplicationContext();
         CharSequence text = "Hello toast!";
 
@@ -171,7 +174,7 @@ public class FacelokCallback extends  com.ipsidy.faceloksdk.FacelokCallback{
         return bitmap;
     }
 
-    public void convertBitmapImageToBase64String( Bitmap image ) {
+    public String convertBitmapImageToBase64String( Bitmap image ) {
 
         if (image != null) {
             /* Get the image as string */
@@ -184,11 +187,14 @@ public class FacelokCallback extends  com.ipsidy.faceloksdk.FacelokCallback{
 
             String img_full = Base64.encodeToString(full_bytes, Base64.DEFAULT);
 
+            return  img_full;
+
             // new HTTPWorker(ctx, mHandler, HTTPWorker.WRITE_COMMENT, true).execute(
             // Integer.toString(id), comment, author, img_thumbnail, img_full);
         } else {
             // new HTTPWorker(ctx, mHandler, HTTPWorker.WRITE_COMMENT, true).execute(
             // Integer.toString(id), comment, author, null, null);
         }
+        return "";
     }
 }

@@ -42,7 +42,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         cameraPreview.setOnClickListener {
-            val intent = Intent(this, CameraPreviewActivity::class.java)
+            val intent = Intent(this, CameraJavaActivity::class.java)
+//            val intent = Intent(this, CameraPreviewActivity::class.java)
             startActivity(intent)
         }
 
