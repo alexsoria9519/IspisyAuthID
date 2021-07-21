@@ -10,4 +10,11 @@
     <string name="username_ipsidy">acubillos</string>
     <string name="password_ipsidy">OTFedj$3262</string>
     <string name="account_getApiKeys_Method">GetApiKeys</string>
+    <string name="title_activity_camera_preview">CameraPreview</string>
+    <string name="title_camera_preview">CameraPreview</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello Square World!</string>
 </resources>

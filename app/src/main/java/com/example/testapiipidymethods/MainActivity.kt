@@ -14,6 +14,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var accounts: TextView
     private lateinit var auth: TextView
     private lateinit var admin: TextView
+    private lateinit var cameraPreview: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         accounts = findViewById(R.id.accounts)
         auth = findViewById(R.id.auth)
         admin = findViewById(R.id.admin)
+        cameraPreview = findViewById(R.id.camera_preview_label)
 
 
         accounts.setOnClickListener {
@@ -36,6 +38,11 @@ class MainActivity : AppCompatActivity() {
 
         admin.setOnClickListener {
             val intent = Intent(this, AdminMethodsActivity::class.java)
+            startActivity(intent)
+        }
+
+        cameraPreview.setOnClickListener {
+            val intent = Intent(this, CameraPreviewActivity::class.java)
             startActivity(intent)
         }
 

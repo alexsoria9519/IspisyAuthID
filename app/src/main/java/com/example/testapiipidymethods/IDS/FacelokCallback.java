@@ -43,9 +43,12 @@ public class FacelokCallback extends  com.ipsidy.faceloksdk.FacelokCallback{
         this.landmarkPoints = landmarkPoints;
     }
 
-    FacelokCallback(FacelokImpl face, CameraPreview mCameraView, Context context) {
-        this.mInterface = face;
+    public void setmCameraView(CameraPreview mCameraView) {
         this.mCameraView = mCameraView;
+    }
+
+    public FacelokCallback(FacelokImpl face, Context context) {
+        this.mInterface = face;
         this.context = context;
     }
 
@@ -107,8 +110,6 @@ public class FacelokCallback extends  com.ipsidy.faceloksdk.FacelokCallback{
 
         mCameraView.mFacelok = mInterface;
 
-        //ConstraintLayout layout = (ConstraintLayout) findViewById(R.id.constraintLayout);
-
 //        FrameLayout layout = findViewById(R.id.camera_preview);
 
         layout.addView(mCameraView);
@@ -117,10 +118,10 @@ public class FacelokCallback extends  com.ipsidy.faceloksdk.FacelokCallback{
         // TODO DRAW LANDMARKS
 
 //        RelativeLayout relativeLayoutControls = findViewById(R.id.controls_layout);
-        relativeLayoutControls.bringToFront();
+//        relativeLayoutControls.bringToFront();
 
 //        RelativeLayout relativeLayoutSensorsData = findViewById(R.id.sensors_data_layout);
-        relativeLayoutSensorsData.bringToFront();
+//        relativeLayoutSensorsData.bringToFront();
 
 
     }
