@@ -1,10 +1,15 @@
 package com.example.testapiipidymethods
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
 import com.example.testapiipidymethods.IDS.AccountsMethodsActivity
 import com.example.testapiipidymethods.IDS.AdminMethodsActivity
 import com.example.testapiipidymethods.IDS.AuthorizationMethodsActivity
@@ -48,6 +53,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         saveLocalStorage(getString(R.string.username_ipsidy), getString(R.string.password_ipsidy))
+
+        isStoragePermissionGranted()
     }
 
     private fun saveLocalStorage(username: String?, password: String?) {
@@ -56,6 +63,28 @@ class MainActivity : AppCompatActivity() {
         editor.putString("USERNAME", username)
         editor.putString("PASSWORD", password)
         editor.commit()
+    }
+
+    fun isStoragePermissionGranted(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                === PackageManager.PERMISSION_GRANTED
+            ) {
+                Log.v("Data Permission", "Permission is granted")
+                true
+            } else {
+                Log.v("Data Permission", "Permission is revoked")
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    1
+                )
+                false
+            }
+        } else { //permission is automatically granted on sdk<23 upon installation
+            Log.v("DAta", "Permission is granted")
+            true
+        }
     }
 
 
