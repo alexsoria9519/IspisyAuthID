@@ -61,10 +61,9 @@ public class FacelokCallback extends  com.ipsidy.faceloksdk.FacelokCallback{
 
         mInterface.stop();
 
-        Consumo consumo = new Consumo();
-        consumo.getDataFoto(convertBitmapImageToBase64String(photo), photo, context);
+        IpsidyData ipsidy = new IpsidyData();
+        ipsidy.getDataFoto(convertBitmapImageToBase64String(photo), photo, context);
 
-//        Context context = getApplicationContext();
         CharSequence text = "Hello toast!";
 
         int duration = Toast.LENGTH_SHORT;

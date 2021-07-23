@@ -17,9 +17,9 @@ interface IpsidyAccountServices {
         @Path(value = "name", encoded = true) size: String
     ): Call<Account>
 
-    @POST("/accounts")
+    @POST("accounts")
     fun createAccount(
-        @Body postModel: Request
+        @Body postModel: Account
     ): Call<Account>
 
     @GET("/accounts/{accountNumber}")

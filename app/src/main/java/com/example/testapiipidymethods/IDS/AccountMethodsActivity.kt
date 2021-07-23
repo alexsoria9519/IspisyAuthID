@@ -43,6 +43,11 @@ class AccountMethodsActivity : AppCompatActivity() {
         })
     }
 
+    private fun createAccount(){
+
+    }
+
+
 
 
 }
