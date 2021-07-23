@@ -37,10 +37,10 @@ interface IpsidyAccountServices {
         @Path(value = "accountNumber", encoded = true) accountNumber: String
     ): Call<Account>
 
-    @POST("/accounts/{accountNumber}/bioCredential")
+    @POST("accounts/{accountNumber}/bioCredential")
     fun createAccountBiometricCredential(
         @Path(value = "accountNumber", encoded = true) accountNumber: String,
-        @Body postModel: BiometricRequest
+        @Body postModel: BiometricCredential
     ): Call<BiometricCredential>
 
     @DELETE("/accounts/{accountNumber}/bioCredential")
