@@ -59,7 +59,7 @@ interface IpsidyAccountServices {
         @Body postModel: BiometricCredential
     ) : Response<Boolean>
 
-    @POST("/accounts/{accountNumber}/bioCredential/verify2")
+    @POST("accounts/{accountNumber}/bioCredential/verify2")
     fun verifyAccountBiometricCredential2(
         @Path(value = "accountNumber", encoded = true) accountNumber: String,
         @Body postModel: BiometricCredential

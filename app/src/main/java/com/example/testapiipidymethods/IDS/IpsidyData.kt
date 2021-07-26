@@ -5,8 +5,10 @@ import android.graphics.Bitmap
 import android.os.Environment
 import android.util.Base64
 import android.util.Log
+import android.widget.Toast
 import com.example.testapiipidymethods.IDS.Accounts.Account
 import com.example.testapiipidymethods.IDS.Accounts.BiometricCredential
+import com.example.testapiipidymethods.IDS.Accounts.BiometricVerificationResult
 import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
@@ -51,12 +53,43 @@ class IpsidyData {
             Log.e("Data Account Ipsidy", dataAccount.toString())
 
             if (utils.existsDataBimetricalAccount()) {
-                // verification process
+                Log.e("Verification", "The next step for the verification data")
+                verifyIdentification(context, dataImage, dataAccount.AccountNumber!!)
             } else {
                 createIpsidyBiometricalAccount(context, dataAccount.AccountNumber!!, dataImage)
             }
         } else {
             createIpsidyAccount(context)
+        }
+    }
+
+    private fun analyzeDataVerification(
+        dataVerification: BiometricVerificationResult,
+        context: Context
+    ) {
+        if (dataVerification.MatchProbability != null && dataVerification.Score != null) {
+            if (dataVerification.Verified!! && dataVerification.Score!! >= 90 && dataVerification.MatchProbability!! >= 0.90) {
+                val toast: Toast = Toast.makeText(
+                    context,
+                    "Congratulations, you has been verified successfully",
+                    Toast.LENGTH_SHORT
+                )
+                toast.show()
+            } else if (dataVerification.Verified!! && dataVerification.Score!! < 90 && dataVerification.MatchProbability!! < 0.90) {
+                val toast: Toast = Toast.makeText(
+                    context,
+                    "We're sorry, your identity could not be verified. Rescan your face please",
+                    Toast.LENGTH_SHORT
+                )
+                toast.show()
+            } else if (!dataVerification.Verified!!) {
+                val toast: Toast = Toast.makeText(
+                    context,
+                    "We're sorry, your identity could not be verified",
+                    Toast.LENGTH_SHORT
+                )
+                toast.show()
+            }
         }
     }
 
@@ -111,10 +144,13 @@ class IpsidyData {
 
         val call = service.getAccountService(context).createAccountBiometricCredential(
             accountNumber,
-            getDataModelBioCredential(accountNumber, dataImage)
+            getDataModelBioCredential(accountNumber, dataImage, getImageType("JPEG"))
         );
 
-        Log.e("Data to Send ", gson.toJson(getDataModelBioCredential(accountNumber, dataImage)))
+        Log.e(
+            "Data to Send ",
+            gson.toJson(getDataModelBioCredential(accountNumber, dataImage, getImageType("JPEG")))
+        )
 
         call.enqueue(object : Callback<BiometricCredential> {
             override fun onResponse(
@@ -140,15 +176,76 @@ class IpsidyData {
 
     private fun getDataModelBioCredential(
         accountNumber: String,
-        dataImage: String //Image in base 64
+        dataImage: String, //Image in base 64
+        imageType: Int
     ): BiometricCredential {
         val biometric: BiometricCredential = BiometricCredential()
         biometric.Description = "This is a face record of the $accountNumber"
         biometric.CredentialType = 1 // 0 Unknown Face=1
-        biometric.DataType = 1 // Unknown=0 Jpeg=1 Bmp=2 Gif=3 Png=4 Tiff=5 Jpeg2K=6 Template=100
+        biometric.DataType =
+            imageType // Unknown=0 Jpeg=1 Bmp=2 Gif=3 Png=4 Tiff=5 Jpeg2K=6 Template=100
         biometric.Data = dataImage
         biometric.CreatedDate = Date()
         return biometric
+    }
+
+    private fun getImageType(extension: String): Int {
+        var number: Int = 0;
+        when (extension) {
+            "JPEG" -> number = 1
+            "BMP" -> number = 2
+            "GIF" -> number = 3
+            "PNG" -> number = 4
+            "TIFF" -> number = 5
+            "JPEG2K" -> number = 6
+            "TEMPLATE" -> 100
+            else -> number = 0
+        }
+        return number
+    }
+
+    private fun verifyIdentification(
+        context: Context,
+        dataImage: String,
+        accountNumber: String
+    ): BiometricVerificationResult {
+        var verify = BiometricVerificationResult();
+        val service = Services()
+        val gson = Gson()
+
+        try {
+            val call = service.getAccountService(context).verifyAccountBiometricCredential2(
+                accountNumber,
+                getDataModelBioCredential(accountNumber, dataImage, getImageType("JPEG"))
+            )
+
+
+            call.enqueue(object : Callback<BiometricVerificationResult> {
+                override fun onResponse(
+                    call: Call<BiometricVerificationResult>,
+                    response: Response<BiometricVerificationResult>
+                ) {
+                    if (response.code() == 200) {
+                        val dataResponse = response.body()!!
+                        verify = dataResponse
+                        Log.e("Data Response Match", gson.toJson(dataResponse))
+                        analyzeDataVerification(dataResponse, context)
+                    } else if (response.code() === 409) {
+                        Log.e("Error Response ", response.raw().networkResponse().message())
+                        Log.e("Error Response ", response.raw().networkResponse().toString())
+                    } else if (response.code() === 404) {
+                        Log.e("Error Response", "Not Found Request")
+                    }
+                }
+
+                override fun onFailure(call: Call<BiometricVerificationResult>, t: Throwable) {
+                    Log.e("Error", t.message!!)
+                }
+            })
+        } catch (e: Exception) {
+
+        }
+        return verify
     }
 
     fun convertBitmapImageToBase64String(image: Bitmap?): String? {
