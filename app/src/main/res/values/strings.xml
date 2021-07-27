@@ -12,6 +12,8 @@
     <string name="account_getApiKeys_Method">GetApiKeys</string>
     <string name="title_activity_camera_preview">CameraPreview</string>
     <string name="title_camera_preview">CameraPreview</string>
+    <string name="button_create_account">Create Account</string>
+    <string name="button_verify">Verify Identification</string>
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.

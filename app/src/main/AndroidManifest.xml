@@ -3,15 +3,16 @@
     package="com.example.testapiipidymethods">
 
     <application
-        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.TestApiIpidyMethods">
-        <activity android:name=".CameraJavaActivity"></activity>
-        <activity android:name=".IDS.CameraPreviewActivity"></activity>
+        android:theme="@style/Theme.TestApiIpidyMethods"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".IDS.Actions.CreateAccountActivity"></activity>
+        <activity android:name=".CameraJavaActivity" />
+        <activity android:name=".IDS.CameraPreviewActivity" />
         <activity android:name=".IDS.AccountMethodsActivity" />
         <activity android:name=".IDS.AuthorizationMethodsActivity" />
         <activity android:name=".IDS.AdminMethodsActivity" />
@@ -24,9 +25,10 @@
             </intent-filter>
         </activity>
     </application>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 </manifest>

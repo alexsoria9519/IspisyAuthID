@@ -8,9 +8,11 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import com.example.testapiipidymethods.IDS.AccountsMethodsActivity
+import com.example.testapiipidymethods.IDS.Actions.CreateAccountActivity
 import com.example.testapiipidymethods.IDS.AdminMethodsActivity
 import com.example.testapiipidymethods.IDS.AuthorizationMethodsActivity
 
@@ -20,6 +22,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var auth: TextView
     private lateinit var admin: TextView
     private lateinit var cameraPreview: TextView
+    private lateinit var createAccountButton: Button
+    private lateinit var verifyIdentity :Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +33,7 @@ class MainActivity : AppCompatActivity() {
         auth = findViewById(R.id.auth)
         admin = findViewById(R.id.admin)
         cameraPreview = findViewById(R.id.camera_preview_label)
+        createAccountButton = findViewById(R.id.create_account_button)
 
 
         accounts.setOnClickListener {
@@ -49,6 +54,11 @@ class MainActivity : AppCompatActivity() {
         cameraPreview.setOnClickListener {
             val intent = Intent(this, CameraJavaActivity::class.java)
 //            val intent = Intent(this, CameraPreviewActivity::class.java)
+            startActivity(intent)
+        }
+
+        createAccountButton.setOnClickListener {
+            val intent = Intent(this, CreateAccountActivity::class.java)
             startActivity(intent)
         }
 

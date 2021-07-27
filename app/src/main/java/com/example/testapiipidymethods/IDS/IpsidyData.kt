@@ -231,7 +231,6 @@ class IpsidyData() {
                 ) {
                     if (response.code() == 200) {
                         val dataResponse = response.body()!!
-                        verify = dataResponse
                         Log.e("Data Response Match", gson.toJson(dataResponse))
                         analyzeDataVerification(dataResponse, context)
                         responseVerification = true
