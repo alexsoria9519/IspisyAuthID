@@ -19,22 +19,19 @@ import java.io.FileOutputStream
 import java.util.*
 
 
-class IpsidyData {
-
-    constructor()
+class IpsidyData() {
 
 
     fun getDataFoto(data: String, bitImage: Bitmap, context: Context) {
         val util = Utils(context)
         Log.e("Data Desde Clase Kotlin", data)
-        util.saveDataPhoto(data)
+        util.saveDataPhoto(data) //Save Local Storage
         saveDataToDevice(bitImage) // Save Image in the Storage
         val dataImage = convertBitmapImageToBase64String(bitImage)
         validateAccountIpsidy(context, util, dataImage!!)
     }
 
     private fun saveDataToDevice(bitImage: Bitmap) {
-        // TODO check this implementation for save in the file system
         val file_path = Environment.getExternalStorageDirectory().absolutePath +
                 "/PhysicsSketchpad"
         val dir = File(file_path)
@@ -47,13 +44,13 @@ class IpsidyData {
     }
 
 
-    private fun validateAccountIpsidy(context: Context, utils: Utils, dataImage: String) {
+    private fun validateAccountIpsidy(context: Context, utils: Utils, dataImage: String): String {
         if (utils.existsDataAccountIpsidy()) {
             val dataAccount: Account = utils.getDataAccountIpsidy()
-            Log.e("Data Account Ipsidy", dataAccount.toString())
+//            Log.e("Data Account Ipsidy", dataAccount.toString())
 
             if (utils.existsDataBimetricalAccount()) {
-                Log.e("Verification", "The next step for the verification data")
+//                Log.e("Verification", "The next step for the verification data")
                 verifyIdentification(context, dataImage, dataAccount.AccountNumber!!)
             } else {
                 createIpsidyBiometricalAccount(context, dataAccount.AccountNumber!!, dataImage)
@@ -61,6 +58,7 @@ class IpsidyData {
         } else {
             createIpsidyAccount(context)
         }
+        return ""
     }
 
     private fun analyzeDataVerification(
@@ -68,14 +66,14 @@ class IpsidyData {
         context: Context
     ) {
         if (dataVerification.MatchProbability != null && dataVerification.Score != null) {
-            if (dataVerification.Verified!! && dataVerification.Score!! >= 90 && dataVerification.MatchProbability!! >= 0.90) {
+            if (dataVerification.Verified!! && dataVerification.Score!! >= 90 && dataVerification.MatchProbability >= 0.90) {
                 val toast: Toast = Toast.makeText(
                     context,
                     "Congratulations, you has been verified successfully",
                     Toast.LENGTH_SHORT
                 )
                 toast.show()
-            } else if (dataVerification.Verified!! && dataVerification.Score!! < 90 && dataVerification.MatchProbability!! < 0.90) {
+            } else if (dataVerification.Verified!! && dataVerification.Score!! < 90 && dataVerification.MatchProbability < 0.90) {
                 val toast: Toast = Toast.makeText(
                     context,
                     "We're sorry, your identity could not be verified. Rescan your face please",
@@ -93,35 +91,41 @@ class IpsidyData {
         }
     }
 
-    private fun createIpsidyAccount(context: Context) {
+    private fun createIpsidyAccount(context: Context): Boolean {
         val service = Services()
         val utils = Utils(context)
-        val gson = Gson()
+        var responseCreation = false
 
-        val call = service.getAccountService(context).createAccount(getDataModelAccount());
+        try {
+            val call = service.getAccountService(context).createAccount(getDataModelAccount())
 
-        Log.e("Data to Send ", gson.toJson(getDataModelAccount()))
+//            Log.e("Data to Send ", gson.toJson(getDataModelAccount()))
 
-        call.enqueue(object : Callback<Account> {
-            override fun onResponse(call: Call<Account>, response: Response<Account>) {
-                if (response.code() == 200) {
-                    val dataResponse = response.body()!!
-                    utils.saveDataResponse(dataResponse)
-                } else if (response.code() === 409) {
-                    Log.e("Error Response ", response.raw().networkResponse().message())
-                    Log.e("Error Response ", response.raw().networkResponse().toString())
+            call.enqueue(object : Callback<Account> {
+                override fun onResponse(call: Call<Account>, response: Response<Account>) {
+                    if (response.code() == 200) {
+                        val dataResponse = response.body()!!
+                        utils.saveDataResponse(dataResponse)
+                        responseCreation = true
+                    } else if (response.code() === 409) {
+                        Log.e("Error Response ", response.raw().networkResponse().message())
+                        Log.e("Error Response ", response.raw().networkResponse().toString())
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<Account>, t: Throwable) {
-                Log.e("Error", t.message!!)
-            }
-        })
+                override fun onFailure(call: Call<Account>, t: Throwable) {
+                    Log.e("Error", t.message!!)
+                }
+            })
+        } catch (e: Exception) {
+
+        }
+        return responseCreation!!
     }
 
     private fun getDataModelAccount(): Account {
-        val dataAccount: Account = Account()
-        dataAccount.AccountNumber = "TestAccount6-OTF" // Compose for the username ot OTF Account
+        val dataAccount = Account()
+        dataAccount.AccountNumber = "TestAccount6-OTF" // Compose for the username of OTF Account
         dataAccount.DisplayName = "TestAccount 6 OTF"
         dataAccount.CustomDisplayName = "TestAccount 6 OTF"
         dataAccount.Description = "TestAccount 6 OTF for OnTheFlyPOS Inc."
@@ -136,10 +140,10 @@ class IpsidyData {
         context: Context,
         accountNumber: String,
         dataImage: String // Image base 64
-    ) {
+    ): Boolean {
         val service = Services()
         val utils = Utils(context)
-        val gson = Gson()
+        var responseCreation: Boolean? = false
 
 
         val call = service.getAccountService(context).createAccountBiometricCredential(
@@ -147,31 +151,31 @@ class IpsidyData {
             getDataModelBioCredential(accountNumber, dataImage, getImageType("JPEG"))
         );
 
-        Log.e(
-            "Data to Send ",
-            gson.toJson(getDataModelBioCredential(accountNumber, dataImage, getImageType("JPEG")))
-        )
-
-        call.enqueue(object : Callback<BiometricCredential> {
-            override fun onResponse(
-                call: Call<BiometricCredential>,
-                response: Response<BiometricCredential>
-            ) {
-                if (response.code() == 200) {
-                    val dataResponse = response.body()!!
-                    utils.saveDataResponse(dataResponse)
-                } else if (response.code() === 409) {
-                    Log.e("Error Response ", response.raw().networkResponse().message())
-                    Log.e("Error Response ", response.raw().networkResponse().toString())
+        try {
+            call.enqueue(object : Callback<BiometricCredential> {
+                override fun onResponse(
+                    call: Call<BiometricCredential>,
+                    response: Response<BiometricCredential>
+                ) {
+                    if (response.code() == 200) {
+                        val dataResponse = response.body()!!
+                        utils.saveDataResponse(dataResponse)
+                        responseCreation = true
+                    } else if (response.code() === 409) {
+                        Log.e("Error Response ", response.raw().networkResponse().message())
+                        Log.e("Error Response ", response.raw().networkResponse().toString())
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<BiometricCredential>, t: Throwable) {
-                Log.e("Error", t.message!!)
-            }
-        })
+                override fun onFailure(call: Call<BiometricCredential>, t: Throwable) {
+                    Log.e("Error", t.message!!)
+                }
+            })
+        } catch (e: Exception) {
 
+        }
 
+        return responseCreation!!
     }
 
     private fun getDataModelBioCredential(
@@ -179,7 +183,7 @@ class IpsidyData {
         dataImage: String, //Image in base 64
         imageType: Int
     ): BiometricCredential {
-        val biometric: BiometricCredential = BiometricCredential()
+        val biometric = BiometricCredential()
         biometric.Description = "This is a face record of the $accountNumber"
         biometric.CredentialType = 1 // 0 Unknown Face=1
         biometric.DataType =
@@ -190,7 +194,7 @@ class IpsidyData {
     }
 
     private fun getImageType(extension: String): Int {
-        var number: Int = 0;
+        var number = 0;
         when (extension) {
             "JPEG" -> number = 1
             "BMP" -> number = 2
@@ -208,10 +212,10 @@ class IpsidyData {
         context: Context,
         dataImage: String,
         accountNumber: String
-    ): BiometricVerificationResult {
-        var verify = BiometricVerificationResult();
+    ): Boolean {
         val service = Services()
         val gson = Gson()
+        var responseVerification = false
 
         try {
             val call = service.getAccountService(context).verifyAccountBiometricCredential2(
@@ -230,6 +234,7 @@ class IpsidyData {
                         verify = dataResponse
                         Log.e("Data Response Match", gson.toJson(dataResponse))
                         analyzeDataVerification(dataResponse, context)
+                        responseVerification = true
                     } else if (response.code() === 409) {
                         Log.e("Error Response ", response.raw().networkResponse().message())
                         Log.e("Error Response ", response.raw().networkResponse().toString())
@@ -245,10 +250,10 @@ class IpsidyData {
         } catch (e: Exception) {
 
         }
-        return verify
+        return responseVerification!!
     }
 
-    fun convertBitmapImageToBase64String(image: Bitmap?): String? {
+    private fun convertBitmapImageToBase64String(image: Bitmap?): String? {
         if (image != null) {
             /* Get the image as string */
             // Normal
@@ -256,12 +261,6 @@ class IpsidyData {
             image.compress(Bitmap.CompressFormat.JPEG, 100, full_stream)
             val full_bytes = full_stream.toByteArray()
             return Base64.encodeToString(full_bytes, Base64.DEFAULT)
-
-            // new HTTPWorker(ctx, mHandler, HTTPWorker.WRITE_COMMENT, true).execute(
-            // Integer.toString(id), comment, author, img_thumbnail, img_full);
-        } else {
-            // new HTTPWorker(ctx, mHandler, HTTPWorker.WRITE_COMMENT, true).execute(
-            // Integer.toString(id), comment, author, null, null);
         }
         return ""
     }
