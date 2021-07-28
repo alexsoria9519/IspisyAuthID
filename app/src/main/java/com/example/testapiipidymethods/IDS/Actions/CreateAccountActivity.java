@@ -8,7 +8,12 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
+import android.widget.PopupWindow;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
 import com.example.testapiipidymethods.IDS.CameraPreview;
@@ -26,9 +31,13 @@ public class CreateAccountActivity extends AppCompatActivity {
     private FacelokCallback mCallback;
     private FacelokImpl mInterface;
     private static String TAG = "facelok-sampleapp";
-    private RelativeLayout relativeLayout;
     private Button confirmCreateAccount;
     private Button tryAgain_Account;
+    private Button closePopup;
+
+    private LayoutInflater layoutInflater;
+    private View popupView;
+    private PopupWindow popupWindow;
 
     static {
         System.loadLibrary("facelok");
@@ -39,26 +48,55 @@ public class CreateAccountActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
 
-        // create our callback
+         //create our callback
 //        relativeLayout = findViewById(R.id.relative_create_account);
 //        relativeLayout.bringToFront();
+//
+        confirmCreateAccount = findViewById(R.id.confirm_create_account);
 
-        confirmCreateAccount = findViewById(R.id.create_account_button);
-        tryAgain_Account = findViewById(R.id.try_again_account);
 
+
+//        confirmCreateAccount.setOnClickListener(new Button.OnClickListener(){
+//
+//            @Override
+//            public void onClick(View arg0) {
+//                layoutInflater =(LayoutInflater)getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+//                popupView = layoutInflater.inflate(R.layout.popup_identity_created, null);
+//                popupWindow = new PopupWindow(popupView, RadioGroup.LayoutParams.WRAP_CONTENT,
+//                        RadioGroup.LayoutParams.WRAP_CONTENT);
+//
+//                closePopup = (Button)popupView.findViewById(R.id.close_created_popup);
+//                closePopup.setOnClickListener(new Button.OnClickListener(){
+//
+//                    @Override
+//                    public void onClick(View v) {
+//                        popupWindow.dismiss();
+//                    }});
+//
+//                popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+//
+//
+//            }});
+
+
+
+
+
+//        tryAgain_Account = findViewById(R.id.try_again_account);
+//
 //        confirmCreateAccount.bringToFront();
 //        tryAgain_Account.bringToFront();
 
 
-//        // setup facelok
-//        mInterface = new FacelokImpl();
-//
-//        mCallback = new FacelokCallback(mInterface, this);
-//        mCallback.setLayout(findViewById(R.id.camera_preview_create_account));
-//        mInterface.setActivity(this);
-//
-//        mInterface.initialize();
-//        mInterface.setCallback(mCallback);
+        // setup facelok
+        mInterface = new FacelokImpl();
+
+        mCallback = new FacelokCallback(mInterface, this);
+        mCallback.setLayout(findViewById(R.id.camera_preview_create_account));
+        mInterface.setActivity(this);
+
+        mInterface.initialize();
+        mInterface.setCallback(mCallback);
 
         // make sure we have camera permissions
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
