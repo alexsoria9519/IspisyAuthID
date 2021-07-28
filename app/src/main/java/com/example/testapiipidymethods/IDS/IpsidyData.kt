@@ -22,13 +22,13 @@ import java.util.*
 class IpsidyData() {
 
 
-    fun getDataFoto(data: String, bitImage: Bitmap, context: Context) {
+    fun setDataFoto(data: String, bitImage: Bitmap, context: Context) {
         val util = Utils(context)
         Log.e("Data Desde Clase Kotlin", data)
         util.saveDataPhoto(data) //Save Local Storage
         saveDataToDevice(bitImage) // Save Image in the Storage
-        val dataImage = convertBitmapImageToBase64String(bitImage)
-        validateAccountIpsidy(context, util, dataImage!!)
+//        val dataImage = convertBitmapImageToBase64String(bitImage)
+//        validateAccountIpsidy(context, util, dataImage!!)
     }
 
     private fun saveDataToDevice(bitImage: Bitmap) {
@@ -91,7 +91,7 @@ class IpsidyData() {
         }
     }
 
-    private fun createIpsidyAccount(context: Context): Boolean {
+    fun createIpsidyAccount(context: Context): Boolean {
         val service = Services()
         val utils = Utils(context)
         var responseCreation = false
@@ -136,7 +136,7 @@ class IpsidyData() {
         return dataAccount
     }
 
-    private fun createIpsidyBiometricalAccount(
+    fun createIpsidyBiometricalAccount(
         context: Context,
         accountNumber: String,
         dataImage: String // Image base 64
@@ -208,7 +208,7 @@ class IpsidyData() {
         return number
     }
 
-    private fun verifyIdentification(
+    fun verifyIdentification(
         context: Context,
         dataImage: String,
         accountNumber: String

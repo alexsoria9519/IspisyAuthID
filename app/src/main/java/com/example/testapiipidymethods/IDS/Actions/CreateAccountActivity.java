@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 
 import com.example.testapiipidymethods.IDS.CameraPreview;
 import com.example.testapiipidymethods.IDS.FacelokCallback;
+import com.example.testapiipidymethods.IDS.Utils;
 import com.example.testapiipidymethods.R;
 import com.ipsidy.faceloksdk.CameraFacingEnum;
 import com.ipsidy.faceloksdk.CameraParameters;
@@ -49,9 +50,28 @@ public class CreateAccountActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_account);
 
          //create our callback
-//        relativeLayout = findViewById(R.id.relative_create_account);
-//        relativeLayout.bringToFront();
-//
+        Utils utils = new Utils(this);
+
+        utils.saveDataLocalStorage("ACTION_IDENTIFICATION", "CREATE_BIO_ACCOUNT");
+
+        // setup facelok
+        mInterface = new FacelokImpl();
+
+        mCallback = new FacelokCallback(mInterface, this);
+        mCallback.setLayout(findViewById(R.id.camera_preview_create_account));
+        mInterface.setActivity(this);
+
+        mInterface.initialize();
+        mInterface.setCallback(mCallback);
+
+        // make sure we have camera permissions
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            mInterface.log(LoggerLevel.INFO, "Asking for camera permission");
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
+        }
+    }
+
+    private void presentConfimPopUp(){
         confirmCreateAccount = findViewById(R.id.confirm_create_account);
 
 
@@ -78,31 +98,10 @@ public class CreateAccountActivity extends AppCompatActivity {
 //
 //            }});
 
-
-
-
-
 //        tryAgain_Account = findViewById(R.id.try_again_account);
 //
 //        confirmCreateAccount.bringToFront();
 //        tryAgain_Account.bringToFront();
-
-
-        // setup facelok
-        mInterface = new FacelokImpl();
-
-        mCallback = new FacelokCallback(mInterface, this);
-        mCallback.setLayout(findViewById(R.id.camera_preview_create_account));
-        mInterface.setActivity(this);
-
-        mInterface.initialize();
-        mInterface.setCallback(mCallback);
-
-        // make sure we have camera permissions
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            mInterface.log(LoggerLevel.INFO, "Asking for camera permission");
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
-        }
     }
 
     @Override

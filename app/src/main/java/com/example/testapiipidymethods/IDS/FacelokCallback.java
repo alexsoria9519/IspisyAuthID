@@ -13,9 +13,10 @@ import android.widget.Toast;
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 
+import com.example.testapiipidymethods.IDS.Accounts.Account;
 import com.ipsidy.faceloksdk.*;
 
-public class FacelokCallback extends  com.ipsidy.faceloksdk.FacelokCallback{
+public class FacelokCallback extends com.ipsidy.faceloksdk.FacelokCallback {
 
     private FacelokImpl mInterface;
     private CameraPreview mCameraView;
@@ -24,7 +25,6 @@ public class FacelokCallback extends  com.ipsidy.faceloksdk.FacelokCallback{
     private RelativeLayout relativeLayoutControls;
     private RelativeLayout relativeLayoutSensorsData;
     private HashMap<LandmarkType, Point> landmarkPoints;
-
 
 
     public void setLayout(FrameLayout layout) {
@@ -54,7 +54,6 @@ public class FacelokCallback extends  com.ipsidy.faceloksdk.FacelokCallback{
 
     @Override
     public void detectionComplete(Bitmap photo, String imageInfo) {
-
         mInterface.log(LoggerLevel.INFO, "Got a detection complete event with bmp size of " + (photo.getWidth() * photo.getHeight()));
         mInterface.log(LoggerLevel.INFO, "--CUSTOM-- Got a detection complete event with bmp size of - IMAGE INFO " + imageInfo);
 
@@ -62,8 +61,8 @@ public class FacelokCallback extends  com.ipsidy.faceloksdk.FacelokCallback{
         mInterface.stop();
 
         IpsidyData ipsidy = new IpsidyData();
-        ipsidy.getDataFoto(convertBitmapImageToBase64String(photo), photo, context);
-
+        ipsidy.setDataFoto(convertBitmapImageToBase64String(photo), photo, context);
+        actionToVerify(convertBitmapImageToBase64String(photo));
         CharSequence text = "Hello toast!";
 
         int duration = Toast.LENGTH_SHORT;
@@ -71,15 +70,36 @@ public class FacelokCallback extends  com.ipsidy.faceloksdk.FacelokCallback{
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
 
+    }
 
+    private Boolean actionToVerify(String dataImage) {
+        Utils utils = new Utils(this.context);
+        IpsidyData ipsidyData = new IpsidyData();
+        Boolean responseData = false;
+        if (utils.existsDataSavedLocalStorage("ACTION_IDENTIFICATION")) {
+            String data = utils.getStringDataLocalStorage("ACTION_IDENTIFICATION");
+
+            if (data.equals("CREATE_BIO_ACCOUNT")) {
+                responseData = ipsidyData.createIpsidyAccount(this.context);
+                if (responseData) {
+                    Account account = utils.getDataAccountIpsidy();
+                    responseData = ipsidyData.createIpsidyBiometricalAccount(this.context, account.getAccountNumber(), dataImage);
+                }
+            } else if (data.equals("VERIFY_BIO_ACCOUNT")) {
+                if (utils.existsDataAccountIpsidy()) {
+                    Account account = utils.getDataAccountIpsidy();
+                    responseData = ipsidyData.verifyIdentification(this.context, dataImage, account.getAccountNumber());
+                }
+            }
+        }
+        return responseData;
     }
 
     @Override
     public void validFaceAngle(boolean valid, int angle) {
         if (valid) {
             mInterface.log(LoggerLevel.DEBUG, "face angle change to VALID, angle: " + angle);
-        }
-        else {
+        } else {
             mInterface.log(LoggerLevel.DEBUG, "face angle change to INVALID, angle: " + angle);
         }
     }
@@ -108,7 +128,7 @@ public class FacelokCallback extends  com.ipsidy.faceloksdk.FacelokCallback{
 
         // Adding preview needs to be done after the camera is started
 
-        mCameraView = new CameraPreview(context, mInterface.getCamera() );
+        mCameraView = new CameraPreview(context, mInterface.getCamera());
 
         mCameraView.mFacelok = mInterface;
 
@@ -137,7 +157,7 @@ public class FacelokCallback extends  com.ipsidy.faceloksdk.FacelokCallback{
     @Override
     public void imageProcessed(FaceState state) {
         //mInterface.log(LoggerLevel.DEBUG, "--CUSTOM-- Image Landmarks" + state.getLandmarks());
-        landmarkPoints =  state.getLandmarks();
+        landmarkPoints = state.getLandmarks();
 
         // Get Last image
         Image image = mInterface.getLastImage();
@@ -165,7 +185,7 @@ public class FacelokCallback extends  com.ipsidy.faceloksdk.FacelokCallback{
         ByteArrayOutputStream os = new ByteArrayOutputStream();
 
         android.graphics.Rect rect = new android.graphics.Rect(0, 0, width, height);
-        yuvImage.compressToJpeg( rect, 100, os);
+        yuvImage.compressToJpeg(rect, 100, os);
 
         byte[] jpegByteArray = os.toByteArray();
         Bitmap bitmap = BitmapFactory.decodeByteArray(jpegByteArray, 0, jpegByteArray.length);
@@ -173,7 +193,7 @@ public class FacelokCallback extends  com.ipsidy.faceloksdk.FacelokCallback{
         return bitmap;
     }
 
-    public String convertBitmapImageToBase64String( Bitmap image ) {
+    public String convertBitmapImageToBase64String(Bitmap image) {
 
         if (image != null) {
             /* Get the image as string */
@@ -186,7 +206,7 @@ public class FacelokCallback extends  com.ipsidy.faceloksdk.FacelokCallback{
 
             String img_full = Base64.encodeToString(full_bytes, Base64.DEFAULT);
 
-            return  img_full;
+            return img_full;
 
             // new HTTPWorker(ctx, mHandler, HTTPWorker.WRITE_COMMENT, true).execute(
             // Integer.toString(id), comment, author, img_thumbnail, img_full);
