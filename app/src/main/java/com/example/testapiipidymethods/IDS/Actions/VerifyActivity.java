@@ -8,13 +8,6 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
-import android.widget.PopupWindow;
-import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 
 import com.example.testapiipidymethods.IDS.CameraPreview;
 import com.example.testapiipidymethods.IDS.FacelokCallback;
@@ -25,20 +18,13 @@ import com.ipsidy.faceloksdk.CameraParameters;
 import com.ipsidy.faceloksdk.FacelokImpl;
 import com.ipsidy.faceloksdk.LoggerLevel;
 
-public class CreateAccountActivity extends AppCompatActivity {
+public class VerifyActivity extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 200;
     private CameraPreview mCameraView;
     private FacelokCallback mCallback;
     private FacelokImpl mInterface;
     private static String TAG = "facelok-sampleapp";
-    private Button confirmCreateAccount;
-    private Button tryAgain_Account;
-    private Button closePopup;
-
-    private LayoutInflater layoutInflater;
-    private View popupView;
-    private PopupWindow popupWindow;
 
     static {
         System.loadLibrary("facelok");
@@ -47,18 +33,18 @@ public class CreateAccountActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_account);
+        setContentView(R.layout.activity_verify);
 
-         //create our callback
+        //create our callback
         Utils utils = new Utils(this);
 
-        utils.saveDataLocalStorage("CREATE_BIO_ACCOUNT","ACTION_IDENTIFICATION");
+        utils.saveDataLocalStorage("VERIFY_BIO_ACCOUNT","ACTION_IDENTIFICATION");
 
         // setup facelok
         mInterface = new FacelokImpl();
 
         mCallback = new FacelokCallback(mInterface, this);
-        mCallback.setLayout(findViewById(R.id.camera_preview_create_account));
+        mCallback.setLayout(findViewById(R.id.camera_preview_verify));
         mInterface.setActivity(this);
 
         mInterface.initialize();
@@ -114,5 +100,4 @@ public class CreateAccountActivity extends AppCompatActivity {
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
-
 }

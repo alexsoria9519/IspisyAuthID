@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import com.example.testapiipidymethods.IDS.AccountsMethodsActivity
 import com.example.testapiipidymethods.IDS.Actions.CreateAccountActivity
+import com.example.testapiipidymethods.IDS.Actions.VerifyActivity
 import com.example.testapiipidymethods.IDS.AdminMethodsActivity
 import com.example.testapiipidymethods.IDS.AuthorizationMethodsActivity
 
@@ -34,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         admin = findViewById(R.id.admin)
         cameraPreview = findViewById(R.id.camera_preview_label)
         createAccountButton = findViewById(R.id.create_account_button)
+        verifyIdentity = findViewById(R.id.verify_identify_button)
 
 
         accounts.setOnClickListener {
@@ -61,6 +63,12 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, CreateAccountActivity::class.java)
             startActivity(intent)
         }
+
+        verifyIdentity.setOnClickListener {
+            val intent = Intent(this, VerifyActivity::class.java)
+            startActivity(intent)
+        }
+
 
         saveLocalStorage(getString(R.string.username_ipsidy), getString(R.string.password_ipsidy))
 

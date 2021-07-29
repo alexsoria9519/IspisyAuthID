@@ -10,7 +10,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TestApiIpidyMethods"
         android:usesCleartextTraffic="true">
-        <activity android:name=".IDS.Actions.CreateAccountActivity"></activity>
+        <activity android:name=".IDS.Actions.VerifyActivity"></activity>
+        <activity android:name=".IDS.Actions.CreateAccountActivity" />
         <activity android:name=".CameraJavaActivity" />
         <activity android:name=".IDS.CameraPreviewActivity" />
         <activity android:name=".IDS.AccountMethodsActivity" />
@@ -25,10 +26,10 @@
             </intent-filter>
         </activity>
     </application>
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
 
 </manifest>

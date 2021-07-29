@@ -27,8 +27,8 @@ class IpsidyData() {
         Log.e("Data Desde Clase Kotlin", data)
         util.saveDataPhoto(data) //Save Local Storage
         saveDataToDevice(bitImage) // Save Image in the Storage
-//        val dataImage = convertBitmapImageToBase64String(bitImage)
-//        validateAccountIpsidy(context, util, dataImage!!)
+        val dataImage = convertBitmapImageToBase64String(bitImage)
+        validateAccountIpsidy(context, util, dataImage!!)
     }
 
     private fun saveDataToDevice(bitImage: Bitmap) {
@@ -94,12 +94,14 @@ class IpsidyData() {
     fun createIpsidyAccount(context: Context): Boolean {
         val service = Services()
         val utils = Utils(context)
+        val gson = Gson();
         var responseCreation = false
 
         try {
-            val call = service.getAccountService(context).createAccount(getDataModelAccount())
+            val dataModel = getDataModelAccount();
+            val call = service.getAccountService(context).createAccount(dataModel)
 
-//            Log.e("Data to Send ", gson.toJson(getDataModelAccount()))
+            Log.e("Data to Send ", gson.toJson(dataModel))
 
             call.enqueue(object : Callback<Account> {
                 override fun onResponse(call: Call<Account>, response: Response<Account>) {
@@ -110,6 +112,12 @@ class IpsidyData() {
                     } else if (response.code() === 409) {
                         Log.e("Error Response ", response.raw().networkResponse().message())
                         Log.e("Error Response ", response.raw().networkResponse().toString())
+                        val toast = Toast.makeText(
+                            context,
+                            "You already have an account",
+                            Toast.LENGTH_SHORT
+                        )
+                        toast.show()
                     }
                 }
 
@@ -118,17 +126,17 @@ class IpsidyData() {
                 }
             })
         } catch (e: Exception) {
-
+            Log.e("Error", e.message!!)
         }
         return responseCreation!!
     }
 
     private fun getDataModelAccount(): Account {
         val dataAccount = Account()
-        dataAccount.AccountNumber = "TestAccount6-OTF" // Compose for the username of OTF Account
-        dataAccount.DisplayName = "TestAccount 6 OTF"
-        dataAccount.CustomDisplayName = "TestAccount 6 OTF"
-        dataAccount.Description = "TestAccount 6 OTF for OnTheFlyPOS Inc."
+        dataAccount.AccountNumber = "TestAccount3-OTF" // Compose for the username of OTF Account
+        dataAccount.DisplayName = "TestAccount 3 OTF"
+        dataAccount.CustomDisplayName = "TestAccount 3 OTF"
+        dataAccount.Description = "TestAccount 3 OTF for OnTheFlyPOS Inc."
         dataAccount.Currency = "USD"
         dataAccount.External = false
         dataAccount.CustomerNumber = "OnTheFlyPOS" // Data get Of Interface of OTF Service
@@ -160,10 +168,22 @@ class IpsidyData() {
                     if (response.code() == 200) {
                         val dataResponse = response.body()!!
                         utils.saveDataResponse(dataResponse)
+                        val toast = Toast.makeText(
+                            context,
+                            "Your account has been created succesfully",
+                            Toast.LENGTH_SHORT
+                        )
+                        toast.show()
                         responseCreation = true
                     } else if (response.code() === 409) {
                         Log.e("Error Response ", response.raw().networkResponse().message())
                         Log.e("Error Response ", response.raw().networkResponse().toString())
+                        val toast = Toast.makeText(
+                            context,
+                            "You already have an account",
+                            Toast.LENGTH_SHORT
+                        )
+                        toast.show()
                     }
                 }
 
@@ -235,8 +255,13 @@ class IpsidyData() {
                         analyzeDataVerification(dataResponse, context)
                         responseVerification = true
                     } else if (response.code() === 409) {
-                        Log.e("Error Response ", response.raw().networkResponse().message())
                         Log.e("Error Response ", response.raw().networkResponse().toString())
+                        val toast: Toast = Toast.makeText(
+                            context,
+                            "We're sorry, we have a network error",
+                            Toast.LENGTH_SHORT
+                        )
+
                     } else if (response.code() === 404) {
                         Log.e("Error Response", "Not Found Request")
                     }

@@ -62,7 +62,10 @@ public class FacelokCallback extends com.ipsidy.faceloksdk.FacelokCallback {
 
         IpsidyData ipsidy = new IpsidyData();
         ipsidy.setDataFoto(convertBitmapImageToBase64String(photo), photo, context);
-        actionToVerify(convertBitmapImageToBase64String(photo));
+//        Boolean idenAction = actionToVerify(convertBitmapImageToBase64String(photo));
+
+//        mInterface.log(LoggerLevel.ERROR, "Result of the action: " + idenAction);
+
         CharSequence text = "Hello toast!";
 
         int duration = Toast.LENGTH_SHORT;
@@ -200,7 +203,7 @@ public class FacelokCallback extends com.ipsidy.faceloksdk.FacelokCallback {
             // Normal
             ByteArrayOutputStream full_stream = new ByteArrayOutputStream();
 
-            image.compress(Bitmap.CompressFormat.PNG, 100, full_stream);
+            image.compress(Bitmap.CompressFormat.JPEG, 100, full_stream);
 
             byte[] full_bytes = full_stream.toByteArray();
 
