@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.graphics.YuvImage;
+import android.os.AsyncTask;
 import android.util.Base64;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
@@ -83,15 +84,18 @@ public class FacelokCallback extends com.ipsidy.faceloksdk.FacelokCallback {
             String data = utils.getStringDataLocalStorage("ACTION_IDENTIFICATION");
 
             if (data.equals("CREATE_BIO_ACCOUNT")) {
-                responseData = ipsidyData.createIpsidyAccount(this.context);
+                new IpsidyData.CreateIpsidyAccount(this.context);
+//                responseData = ipsidyData.createIpsidyAccount(this.context);
                 if (responseData) {
                     Account account = utils.getDataAccountIpsidy();
-                    responseData = ipsidyData.createIpsidyBiometricalAccount(this.context, account.getAccountNumber(), dataImage);
+                    new IpsidyData.CreateIpsidyBiometricalAccount(this.context, account.getAccountNumber(), dataImage).execute();
+//                    responseData = ipsidyData.createIpsidyBiometricalAccount(this.context, account.getAccountNumber(), dataImage);
                 }
             } else if (data.equals("VERIFY_BIO_ACCOUNT")) {
                 if (utils.existsDataAccountIpsidy()) {
                     Account account = utils.getDataAccountIpsidy();
-                    responseData = ipsidyData.verifyIdentification(this.context, dataImage, account.getAccountNumber());
+                    new IpsidyData.VerifyIdentification(context, dataImage, account.getAccountNumber()).execute();
+//                    responseData = ipsidyData.verifyIdentification(this.context, dataImage, account.getAccountNumber());
                 }
             }
         }
