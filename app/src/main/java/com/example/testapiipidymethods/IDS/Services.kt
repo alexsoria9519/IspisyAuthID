@@ -6,6 +6,7 @@ import com.example.testapiipidymethods.WebServices.IpsidyAdminServices
 import com.example.testapiipidymethods.WebServices.IpsidyAuthorizationService
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
@@ -14,6 +15,7 @@ class Services {
     fun getAccountService(context: Context): IpsidyAccountServices {
         val retrofit = Retrofit.Builder()
             .baseUrl("https://idlok.ipsidy.net/IDCompleteBackendEngine/Default/AdministrationServiceRest/")
+            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
             .client(interceptor(context))
             .addConverterFactory(GsonConverterFactory.create())
             .build()

@@ -16,6 +16,7 @@ import com.example.testapiipidymethods.IDS.Actions.CreateAccountActivity
 import com.example.testapiipidymethods.IDS.Actions.VerifyActivity
 import com.example.testapiipidymethods.IDS.AdminMethodsActivity
 import com.example.testapiipidymethods.IDS.AuthorizationMethodsActivity
+import com.example.testapiipidymethods.IDS.Utils
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var cameraPreview: TextView
     private lateinit var createAccountButton: Button
     private lateinit var verifyIdentity :Button
+    private lateinit var deleteStorage :Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         cameraPreview = findViewById(R.id.camera_preview_label)
         createAccountButton = findViewById(R.id.create_account_button)
         verifyIdentity = findViewById(R.id.verify_identify_button)
+        deleteStorage = findViewById(R.id.delete_data_storage)
 
 
         accounts.setOnClickListener {
@@ -68,6 +71,13 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, VerifyActivity::class.java)
             startActivity(intent)
         }
+
+        deleteStorage.setOnClickListener {
+            val utils = Utils(this)
+            utils.deleteDataStorage("DATA_ACCOUNT");
+            utils.deleteDataStorage("DATA_ACCOUNT_IPSIDY");
+        }
+
 
 
         saveLocalStorage(getString(R.string.username_ipsidy), getString(R.string.password_ipsidy))

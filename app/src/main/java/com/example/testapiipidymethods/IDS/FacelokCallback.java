@@ -63,7 +63,7 @@ public class FacelokCallback extends com.ipsidy.faceloksdk.FacelokCallback {
 
         IpsidyData ipsidy = new IpsidyData();
         ipsidy.setDataFoto(convertBitmapImageToBase64String(photo), photo, context);
-//        Boolean idenAction = actionToVerify(convertBitmapImageToBase64String(photo));
+        Boolean idenAction = actionToVerify(convertBitmapImageToBase64String(photo));
 
 //        mInterface.log(LoggerLevel.ERROR, "Result of the action: " + idenAction);
 
@@ -84,17 +84,20 @@ public class FacelokCallback extends com.ipsidy.faceloksdk.FacelokCallback {
             String data = utils.getStringDataLocalStorage("ACTION_IDENTIFICATION");
 
             if (data.equals("CREATE_BIO_ACCOUNT")) {
-                new IpsidyData.CreateIpsidyAccount(this.context);
-//                responseData = ipsidyData.createIpsidyAccount(this.context);
-                if (responseData) {
-                    Account account = utils.getDataAccountIpsidy();
-                    new IpsidyData.CreateIpsidyBiometricalAccount(this.context, account.getAccountNumber(), dataImage).execute();
-//                    responseData = ipsidyData.createIpsidyBiometricalAccount(this.context, account.getAccountNumber(), dataImage);
-                }
+
+                IpsidyData ipsidy = new IpsidyData();
+                ipsidy.createIpsidyAccount(this.context, dataImage);
+
+                //new IpsidyData.CreateIpsidyAccount(this.context, dataImage).execute();
+
             } else if (data.equals("VERIFY_BIO_ACCOUNT")) {
                 if (utils.existsDataAccountIpsidy()) {
                     Account account = utils.getDataAccountIpsidy();
-                    new IpsidyData.VerifyIdentification(context, dataImage, account.getAccountNumber()).execute();
+                    IpsidyData ipsidy = new IpsidyData();
+                    ipsidy.verifyIdentification(context, dataImage, account.getAccountNumber());
+                    //IpsidyData.verifyIdentification task = new IpsidyData.VerifyIdentification(context, dataImage, account.getAccountNumber());
+                    //task.execute();
+
 //                    responseData = ipsidyData.verifyIdentification(this.context, dataImage, account.getAccountNumber());
                 }
             }

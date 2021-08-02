@@ -18,9 +18,9 @@ interface IpsidyAccountServices {
     ): Call<Account>
 
     @POST("accounts")
-    fun createAccount(
+    suspend  fun createAccount(
         @Body postModel: Account
-    ): Call<Account>
+    ): Response<Account>
 
     @GET("/accounts/{accountNumber}")
     fun getAccount(
@@ -38,10 +38,10 @@ interface IpsidyAccountServices {
     ): Call<Account>
 
     @POST("accounts/{accountNumber}/bioCredential")
-    fun createAccountBiometricCredential(
+    suspend  fun createAccountBiometricCredential(
         @Path(value = "accountNumber", encoded = true) accountNumber: String,
         @Body postModel: BiometricCredential
-    ): Call<BiometricCredential>
+    ): Response<BiometricCredential>
 
     @DELETE("/accounts/{accountNumber}/bioCredential")
     fun deleteAccountBiometricCredential(
@@ -60,10 +60,10 @@ interface IpsidyAccountServices {
     ) : Response<Boolean>
 
     @POST("accounts/{accountNumber}/bioCredential/verify2")
-    fun verifyAccountBiometricCredential2(
+    suspend fun verifyAccountBiometricCredential2(
         @Path(value = "accountNumber", encoded = true) accountNumber: String,
         @Body postModel: BiometricCredential
-    ): Call<BiometricVerificationResult>
+    ): Response<BiometricVerificationResult>
 
     @POST("/accounts/{accountNumber}/enable?enabled={enabled}&reason={reason}")
     fun enableAccount(
