@@ -40,4 +40,41 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/section_name_admin"/>
+
+    <TextView
+        android:id="@+id/camera_preview_label"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/title_camera_preview"/>
+    <Button
+        android:id="@+id/create_account_button"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_create_account"
+     />
+
+    <Button
+        android:id="@+id/verify_identify_button"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_verify"
+        />
+
+    <Button
+        android:id="@+id/delete_data_storage"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/delete_storage"
+        />
+
 </LinearLayout>
+
+

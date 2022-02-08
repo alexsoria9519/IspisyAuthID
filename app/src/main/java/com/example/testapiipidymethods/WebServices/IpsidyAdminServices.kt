@@ -6,6 +6,7 @@ import com.example.testapiipidymethods.IDS.Admin.*
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
+import java.util.*
 
 interface IpsidyAdminServices {
 
@@ -16,8 +17,9 @@ interface IpsidyAdminServices {
     @POST("/adminUser/apiKeys")
     fun createApiKey(@Body postModel: ApiKeyRequest): Call<ApiKey>
 
-    @GET("/adminUser/apiKeys")
-    fun getApiKeys(): Call<ApiKeyLite> // returns Array ApiKeyLite
+    @GET("adminUser/apiKeys")
+//    fun getApiKeys(): Call<List<ApiKeyLite>> // returns Array ApiKeyLite
+    fun getApiKeys(): Call<ArrayList<ApiKeyLite>> // returns Array ApiKeyLite
 
     @GET("/adminUser/apiKeys/{apiKeyExternalId}/revokeRefeshToken")
     fun revokeApiKeyRefreshToken(

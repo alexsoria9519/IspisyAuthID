@@ -2,6 +2,7 @@ package com.example.testapiipidymethods.WebServices
 
 import com.example.testapiipidymethods.IDS.Request
 import com.example.testapiipidymethods.IDS.Accounts.*
+import com.example.testapiipidymethods.IDS.Authorization.CostumerInfo
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
@@ -16,10 +17,10 @@ interface IpsidyAccountServices {
         @Path(value = "name", encoded = true) size: String
     ): Call<Account>
 
-    @POST("/accounts")
-    fun createAccount(
-        @Body postModel: Request
-    ): Call<Account>
+    @POST("accounts")
+    suspend  fun createAccount(
+        @Body postModel: Account
+    ): Response<Account>
 
     @GET("/accounts/{accountNumber}")
     fun getAccount(
@@ -36,11 +37,11 @@ interface IpsidyAccountServices {
         @Path(value = "accountNumber", encoded = true) accountNumber: String
     ): Call<Account>
 
-    @POST("/accounts/{accountNumber}/bioCredential")
-    fun createAccountBiometricCredential(
+    @POST("accounts/{accountNumber}/bioCredential")
+    suspend  fun createAccountBiometricCredential(
         @Path(value = "accountNumber", encoded = true) accountNumber: String,
-        @Body postModel: BiometricRequest
-    ): Call<BiometricCredential>
+        @Body postModel: BiometricCredential
+    ): Response<BiometricCredential>
 
     @DELETE("/accounts/{accountNumber}/bioCredential")
     fun deleteAccountBiometricCredential(
@@ -58,11 +59,11 @@ interface IpsidyAccountServices {
         @Body postModel: BiometricCredential
     ) : Response<Boolean>
 
-    @POST("/accounts/{accountNumber}/bioCredential/verify2")
-    fun verifyAccountBiometricCredential2(
+    @POST("accounts/{accountNumber}/bioCredential/verify2")
+    suspend fun verifyAccountBiometricCredential2(
         @Path(value = "accountNumber", encoded = true) accountNumber: String,
         @Body postModel: BiometricCredential
-    ): Call<BiometricVerificationResult>
+    ): Response<BiometricVerificationResult>
 
     @POST("/accounts/{accountNumber}/enable?enabled={enabled}&reason={reason}")
     fun enableAccount(
@@ -174,7 +175,7 @@ interface IpsidyAccountServices {
         @Path(value = "uin", encoded = true) uin: String
     ): Call<Void>
 
-
-
+    @POST("login")
+    fun login(): Call<CostumerInfo>
 
 }
